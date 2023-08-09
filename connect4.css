@@ -1,11 +1,24 @@
 /* game board table */
 
+/*TODO: syntax for .root vars*/
+.root {
+  --width: 7;
+  --height: 6;
+}
+/*does this cover a cell?*/
 #board td {
   width: 50px;
   height: 50px;
   border: solid 1px #666;
 }
 
+#board {
+  height: 500px;
+  width: 500px;
+  display: grid;
+  grid-template-rows: repeat(var(--height), 1fr);
+  grid-template-columns: repeat(var(--width), 1fr);
+}
 /* pieces are div within game table cells: draw as colored circles */
 
 .piece {
@@ -13,10 +26,18 @@
   margin: 5px;
   width: 80%;
   height: 80%;
+  border-radius: 50%;
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
 
+
+.red {
+  background-color: red;
+}
+.blue {
+  background-color: blue;
+}
 /* column-top is table row of clickable areas for each column */
 
 #column-top td {
