@@ -23,6 +23,17 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 function makeBoard() {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+  let newBoard = [];
+  for (let row = 0; row < HEIGHT; row++) {
+    let newRow = [];
+    for (let col = 0; col < WIDTH; col++){
+      newRow.push(null);
+    }
+    newBoard.push(newRow);
+  }
+  board = newBoard;
+  console.log(board);
+
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
@@ -49,6 +60,8 @@ function makeHtmlBoard() {
   for (let row = 0; row < HEIGHT; row++) {
     // TODO: Create a table row element and assign to a "row" variable
     //create a row class, rather than an element.
+    let tableRowDiv = document.createElement('tr');
+    tableRowDiv.setAttribute("class", "row" + row);
     for (let col = 0; col < WIDTH; col++) {
       // TODO: Create a table cell element and assign to a "cell" variable
 
