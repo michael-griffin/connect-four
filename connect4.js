@@ -22,19 +22,16 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+  // DONE: set "board" to empty HEIGHT x WIDTH matrix array
 
-  let newBoard = []; //skip this
   for (let row = 0; row < HEIGHT; row++) {
     let newRow = [];
     for (let col = 0; col < WIDTH; col++){
       newRow.push(null);
     }
-    //TODO: could push to board here?
-    newBoard.push(newRow);
+    //DONE: could push to board here?
+    board.push(newRow);
   }
-  board = newBoard;
-  console.log(board);
 
 }
 
@@ -43,11 +40,13 @@ function makeBoard() {
 function makeHtmlBoard() {
   let htmlBoard = document.getElementById('board');
 
-  // TODO: add comment for this code
+  // DONE: add comment for this code
+  /* This is the empty row at the top of the board*/
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
 
-  // TODO: add comment for this code
+  // DONE: add comment for this code
+  /**Fills the top row with clickable cells, which players use to make moves. */
   for (let col = 0; col < WIDTH; col++) {
     let headCell = document.createElement("td");
     headCell.setAttribute("id", `top-${col}`);
@@ -60,23 +59,23 @@ function makeHtmlBoard() {
   // uses HEIGHT to create table rows
   // uses WIDTH to create table cells for each row
   for (let row = 0; row < HEIGHT; row++) {
-    // TODO: Create a table row element and assign to a "row" variable
+    // DONE: Create a table row element and assign to a "row" variable
     //create a row class, rather than an element.
     let tableRow = document.createElement('tr');
-    tableRow.setAttribute("class", `row${row}`); //make this an id?
+    //console.log(`tableRow is ${tableRow}`);
+    tableRow.setAttribute("id", `row${row}`); //make this an id?
+    console.log(`tableRow ID is ${tableRow.id}`);
     for (let col = 0; col < WIDTH; col++) {
-      // TODO: Create a table cell element and assign to a "cell" variable
+      // DONE: Create a table cell element and assign to a "cell" variable
       let tableCell = document.createElement('td');
-      //newdiv.setAttribute('id', 'brand-new'); if we need to make these IDs.
-      //tableCell.classList.add('cell', 'white', `${row}-${col}`);
-      tableCell.setAttribute('id', `c-${row}-${col}`); 
-      // TODO: add an id, c-y-x, to the above table cell element
+      tableCell.setAttribute("id", `c-${row}-${col}`);
+      // DONE: add an id, c-y-x, to the above table cell element
       // you'll use this later, so make sure you use c-y-x
 
-      // TODO: append the table cell to the table row
+      // DONE: append the table cell to the table row
       tableRow.appendChild(tableCell);
     }
-    // TODO: append the row to the html board
+    // DONE: append the row to the html board
     htmlBoard.appendChild(tableRow);
   }
 }
@@ -84,7 +83,7 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return bottom empty y (null if filled) */
 
 function findSpotForCol(col) {
-  // TODO: write the real version of this, rather than always returning 5
+  // DONE: write the real version of this, rather than always returning 5
 
   //check board variable, search bottom row first, then work up. If we hit row0,
   //should exit out?
@@ -103,17 +102,19 @@ function findSpotForCol(col) {
 
 function placeInTable(row, col) {
   // TODO: make a div and insert into correct table cell
-  let htmlBoard = document.getElementById('board');
+  let htmlBoard = document.getElementById('board'); //consider making a global variable
 
   //try to find table cell with id 'c-row-col';
   let targetID = `c-${row}-${col}`;
   let tableCell = document.getElementById(targetID);
+  console.log(`targetID is ${targetID}`);
+  console.log(`tableCell is ${tableCell.id}`);
 
   //update board with currPlayer value
 
   //insert piece,
   let currPiece = document.createElement('div');
-  currPiece.classList.add('piece', `${currPlayer}`);
+  currPiece.classList.add('piece', `p${currPlayer}`);
   tableCell.appendChild(currPiece);
 
 }
@@ -162,6 +163,27 @@ function checkForWin() {
    * currPlayer
    */
   function checkFourMatch(cells) {
+    let match = true;
+    for (let pair of cells) {
+      let [row, col] = pair;
+      //first, check legel coordinate
+      if ((row < 0 || row >= HEIGHT) || (col < 0 || col >= WIDTH)) {
+        //in this case, illegal
+        match = false;
+        break;
+      }
+
+      if (!(board[row][col] === currPlayer)) {
+        match = false;
+        break;
+      }
+
+      //Then, check for player value
+
+    }
+
+    return match;
+
 
     // TODO: Check four cells to see if they're all legal & all color of current
     // player
