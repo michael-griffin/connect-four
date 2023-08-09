@@ -12,12 +12,32 @@
   border: solid 1px #666;
 }
 
+/*Our original idea was a grid, but I don't think this works well when we're
+keeping each cell within a table row. We're now refactoring to flex*/
+
+/*
 #board {
   height: 500px;
   width: 500px;
   display: grid;
   grid-template-rows: repeat(var(--height), 1fr);
   grid-template-columns: repeat(var(--width), 1fr);
+}
+*/
+#board {
+  height: 500px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+tr {
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* pieces are div within game table cells: draw as colored circles */
 

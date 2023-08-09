@@ -60,19 +60,22 @@ function makeHtmlBoard() {
   for (let row = 0; row < HEIGHT; row++) {
     // TODO: Create a table row element and assign to a "row" variable
     //create a row class, rather than an element.
-    let tableRowDiv = document.createElement('tr');
-    tableRowDiv.setAttribute("class", "row" + row);
+    let tableRow = document.createElement('tr');
+    tableRow.setAttribute("class", `row${row}`);
     for (let col = 0; col < WIDTH; col++) {
       // TODO: Create a table cell element and assign to a "cell" variable
-
+      let tableCell = document.createElement('td');
+      //newdiv.setAttribute('id', 'brand-new'); if we need to make these IDs.
+      //tableCell.classList.add('cell', 'white', `${row}-${col}`);
+      tableCell.setAttribute('id', `c-${row}-${col}`); 
       // TODO: add an id, c-y-x, to the above table cell element
       // you'll use this later, so make sure you use c-y-x
 
       // TODO: append the table cell to the table row
-
+      tableRow.appendChild(tableCell);
     }
     // TODO: append the row to the html board
-
+    htmlBoard.appendChild(tableRow);
   }
 }
 
@@ -80,13 +83,36 @@ function makeHtmlBoard() {
 
 function findSpotForCol(col) {
   // TODO: write the real version of this, rather than always returning 5
-  return 5;
+
+  //check board variable, search bottom row first, then work up. If we hit row0,
+  //should exit out?
+  let spot = null;
+  for (let row = 5; row >= 0; row--){
+    if (board[row][col] === null){
+      spot = row;
+      break;
+    }
+  }
+
+  return spot; //Check if typeof is number?
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(row, col) {
   // TODO: make a div and insert into correct table cell
+  let htmlBoard = document.getElementById('board');
+
+  //try to find table cell with id 'c-row-col';
+  let targetID = `c-${row}-${col}`;
+  let tableCell = document.getElementById(targetID);
+
+  //update board with currPlayer value
+
+  //insert piece,
+  let currPiece = document.createElement('div');
+  currPiece.classList.add('piece', `${currPlayer}`);
+  tableCell.appendChild(currPiece);
 }
 
 /** endGame: announce game end */
