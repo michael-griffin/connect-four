@@ -23,12 +23,14 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 function makeBoard() {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
-  let newBoard = [];
+
+  let newBoard = []; //skip this
   for (let row = 0; row < HEIGHT; row++) {
     let newRow = [];
     for (let col = 0; col < WIDTH; col++){
       newRow.push(null);
     }
+    //TODO: could push to board here?
     newBoard.push(newRow);
   }
   board = newBoard;
@@ -61,7 +63,7 @@ function makeHtmlBoard() {
     // TODO: Create a table row element and assign to a "row" variable
     //create a row class, rather than an element.
     let tableRow = document.createElement('tr');
-    tableRow.setAttribute("class", `row${row}`);
+    tableRow.setAttribute("class", `row${row}`); //make this an id?
     for (let col = 0; col < WIDTH; col++) {
       // TODO: Create a table cell element and assign to a "cell" variable
       let tableCell = document.createElement('td');
@@ -113,6 +115,7 @@ function placeInTable(row, col) {
   let currPiece = document.createElement('div');
   currPiece.classList.add('piece', `${currPlayer}`);
   tableCell.appendChild(currPiece);
+
 }
 
 /** endGame: announce game end */
