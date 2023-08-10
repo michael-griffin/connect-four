@@ -26,7 +26,7 @@ function makeBoard() {
 
   for (let row = 0; row < HEIGHT; row++) {
     let newRow = [];
-    for (let col = 0; col < WIDTH; col++){
+    for (let col = 0; col < WIDTH; col++) {
       newRow.push(null);
     }
     //DONE: could push to board here?
@@ -64,7 +64,7 @@ function makeHtmlBoard() {
     let tableRow = document.createElement('tr');
     //console.log(`tableRow is ${tableRow}`);
     tableRow.setAttribute("id", `row${row}`); //make this an id?
-    console.log(`tableRow ID is ${tableRow.id}`);
+    //console.log(`tableRow ID is ${tableRow.id}`);
     for (let col = 0; col < WIDTH; col++) {
       // DONE: Create a table cell element and assign to a "cell" variable
       let tableCell = document.createElement('td');
@@ -88,13 +88,16 @@ function findSpotForCol(col) {
   //check board variable, search bottom row first, then work up. If we hit row0,
   //should exit out?
   let spot = null;
-  for (let row = 5; row >= 0; row--){
-    if (board[row][col] === null){
+  for (let row = 5; row >= 0; row--) { //change to height - 1
+    //console.log('row is ', row);
+    //console.log('col is ', col);
+    if (board[row][col] === null) {
+      //console.log('made it to the inside');
       spot = row;
       break;
     }
   }
-
+  //could switch to return row/return null, instead of making spot var.
   return spot; //Check if typeof is number?
 }
 
@@ -116,41 +119,61 @@ function placeInTable(row, col) {
   let currPiece = document.createElement('div');
   currPiece.classList.add('piece', `p${currPlayer}`);
   tableCell.appendChild(currPiece);
-
+  //possible refactor: use const for a lot of these
 }
 
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  // DONE: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  let col = +evt.target.id; //what are we grabbing. Refactor so class gives row/col info
+  /*   console.log(evt.target.id[evt.target.id.length-1]);
+    console.log(evt.target.id.split('-')[1]); */
+  //Now refactored to grab column!
+  let col = +evt.target.id[evt.target.id.length - 1];
+  //console.log('tried to handle click');
 
   // get next spot in column (if none, ignore click)
   let row = findSpotForCol(col);
+  console.log('row is: ', row);
   if (row === null) {
     return;
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
+  // DONE: add line to update in-memory board
+  //Subtle: flip placeInTable and board
   placeInTable(row, col);
+  board[row][col] = currPlayer;
+  console.log('new board state is: ', board); //we should see this fill.
 
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
 
-  // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
-
+  // DONE: check if all cells in board are filled; if so call, call endGame
+  let tie = true;
+  for (let cell of board[0]) { //only need to check top row.
+    if (cell === null) {
+      tie = false;
+      break;
+    }
+  }
+  //refactor: board[0].every(cell => cell === null);
+  if (tie) {
+    endGame("All pieces filled! You an even match!");
+  }
   // switch players
-  // TODO: switch currPlayer 1 <-> 2
+  // DONE: switch currPlayer 1 <-> 2
+  currPlayer = 3 - currPlayer; //ternary more readable here.
+  console.log('new currPlayer is: ', currPlayer);
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -162,52 +185,48 @@ function checkForWin() {
    * returns true if all are legal coordinates for a cell & all cells match
    * currPlayer
    */
+
+  //refactor to remove match/break pattern. Use every instead.
   function checkFourMatch(cells) {
     let match = true;
     for (let pair of cells) {
       let [row, col] = pair;
       //first, check legel coordinate
       if ((row < 0 || row >= HEIGHT) || (col < 0 || col >= WIDTH)) {
-        //in this case, illegal
         match = false;
         break;
       }
-
+      //Then, check for player value
       if (!(board[row][col] === currPlayer)) {
         match = false;
         break;
       }
-
-      //Then, check for player value
-
     }
-
-    return match;
-
-
-    // TODO: Check four cells to see if they're all legal & all color of current
+    // DONE: Check four cells to see if they're all legal & all color of current
     // player
-
+    return match;
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
+
+  //Possible refactor: rowInd rather than row.
   for (let row = 0; row < HEIGHT; row++) {
     for (let col = 0; col < WIDTH; col++) {
-      // TODO: assign values to the below variables for each of the ways to win
+      // DONE: assign values to the below variables for each of the ways to win
       // horizontal has been assigned for you
       // each should be an array of 4 cell coordinates:
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[row, col], [row, col + 1], [row, col + 2], [row, col + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[row, col], [row + 1, col], [row + 2, col], [row + 3, col]];
+      let diagDL = [[row, col], [row + 1, col - 1], [row + 2, col - 2], [row + 3, col - 3]];
+      let diagDR = [[row, col], [row + 1, col + 1], [row + 2, col + 2], [row + 3, col + 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (checkFourMatch(horiz) || checkFourMatch(vert) ||
-      checkFourMatch(diagDR) || checkFourMatch(diagDL)) {
+        checkFourMatch(diagDR) || checkFourMatch(diagDL)) {
         return true;
       }
     }
